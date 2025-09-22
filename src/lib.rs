@@ -10,6 +10,7 @@ mod fec;
 mod handle;
 mod header;
 mod link_mode;
+mod link_state;
 mod macros;
 mod message;
 mod pause;
@@ -40,6 +41,9 @@ pub use header::EthtoolHeader;
 pub use link_mode::{
     EthtoolLinkModeAttr, EthtoolLinkModeDuplex, EthtoolLinkModeGetRequest,
     EthtoolLinkModeHandle,
+};
+pub use link_state::{
+    EthtoolLinkStateAttr, EthtoolLinkStateGetRequest, EthtoolLinkStateHandle,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{
