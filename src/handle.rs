@@ -9,9 +9,10 @@ use netlink_packet_core::{
 use netlink_packet_generic::GenlMessage;
 
 use crate::{
-    try_ethtool, EthtoolChannelHandle, EthtoolCoalesceHandle, EthtoolError,
-    EthtoolFeatureHandle, EthtoolFecHandle, EthtoolLinkModeHandle,
-    EthtoolMessage, EthtoolPauseHandle, EthtoolRingHandle, EthtoolTsInfoHandle,
+    try_ethtool, EthtoolCableTestHandle, EthtoolChannelHandle,
+    EthtoolCoalesceHandle, EthtoolError, EthtoolFeatureHandle,
+    EthtoolFecHandle, EthtoolLinkModeHandle, EthtoolMessage,
+    EthtoolPauseHandle, EthtoolRingHandle, EthtoolTsInfoHandle,
 };
 
 #[derive(Clone, Debug)]
@@ -56,6 +57,10 @@ impl EthtoolHandle {
         EthtoolChannelHandle::new(self.clone())
     }
 
+    pub fn cable_test(&mut self) -> EthtoolCableTestHandle {
+        EthtoolCableTestHandle::new(self.clone())
+    }
+
     pub async fn request(
         &mut self,
         message: NetlinkMessage<GenlMessage<EthtoolMessage>>,
@@ -70,6 +75,15 @@ impl EthtoolHandle {
     > {
         self.handle.request(message).await.map_err(|e| {
             EthtoolError::RequestFailed(format!("BUG: Request failed with {e}"))
+        })
+    }
+
+    pub async fn notify(
+        &mut self,
+        message: NetlinkMessage<GenlMessage<EthtoolMessage>>,
+    ) -> Result<(), EthtoolError> {
+        self.handle.notify(message).await.map_err(|e| {
+            EthtoolError::NotifyFailed(format!("Notify failed: {e}"))
         })
     }
 }

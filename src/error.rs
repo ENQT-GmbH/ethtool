@@ -18,6 +18,9 @@ pub enum EthtoolError {
     #[error("A netlink request failed")]
     RequestFailed(String),
 
+    #[error("A netlink notify failed")]
+    NotifyFailed(String),
+
     #[error("A bug in this crate")]
     Bug(String),
 }
