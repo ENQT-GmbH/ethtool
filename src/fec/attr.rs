@@ -168,6 +168,10 @@ impl std::fmt::Display for EthtoolFecMode {
 
 impl From<EthtoolBitSet> for EthtoolFecMode {
     fn from(b: EthtoolBitSet) -> Self {
+        let EthtoolBitSet::Verbose(b) = b else {
+            unimplemented!("parsing FEC mode from a compact bitset is currently not supported");
+        };
+
         match b.index {
             ETHTOOL_LINK_MODE_FEC_NONE_BIT => Self::None,
             ETHTOOL_LINK_MODE_FEC_RS_BIT => Self::Rs,

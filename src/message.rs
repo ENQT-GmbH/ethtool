@@ -8,6 +8,7 @@ use crate::{
     coalesce::{parse_coalesce_nlas, EthtoolCoalesceAttr},
     feature::{parse_feature_nlas, EthtoolFeatureAttr},
     fec::{parse_fec_nlas, EthtoolFecAttr},
+    header::EthtoolHeaderFlag,
     link_mode::{parse_link_mode_nlas, EthtoolLinkModeAttr},
     pause::{parse_pause_nlas, EthtoolPauseAttr},
     ring::{parse_ring_nlas, EthtoolRingAttr},
@@ -184,20 +185,25 @@ impl EthtoolMessage {
         }
     }
 
-    pub fn new_link_mode_get(iface_name: Option<&str>) -> Self {
-        let nlas = match iface_name {
-            Some(s) => {
-                vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(vec![
-                    EthtoolHeader::DevName(s.to_string()),
-                ]))]
-            }
-            None => {
-                vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(vec![]))]
-            }
-        };
+    pub fn new_link_mode_get(
+        iface_name: Option<&str>,
+        flags: &[EthtoolHeaderFlag],
+    ) -> Self {
+        let mut headers = Vec::new();
+
+        if let Some(name) = iface_name {
+            headers.push(EthtoolHeader::DevName(name.to_string()));
+        }
+
+        if !flags.is_empty() {
+            headers.push(EthtoolHeader::Flags(flags.to_vec()));
+        }
+
         EthtoolMessage {
             cmd: EthtoolCmd::LinkModeGet,
-            nlas,
+            nlas: vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(
+                headers,
+            ))],
         }
     }
 
