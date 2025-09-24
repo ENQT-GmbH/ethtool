@@ -43,7 +43,7 @@ pub use link_mode::{
     EthtoolLinkModeHandle,
 };
 pub use link_state::{
-    EthtoolLinkStateAttr, EthtoolLinkStateGetRequest, EthtoolLinkStateHandle,
+    EthtoolLinkStateAttr, EthtoolLinkStateGetRequest, EthtoolLinkStateHandle, EthtoolLinkExtState
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{
