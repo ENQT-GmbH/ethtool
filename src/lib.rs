@@ -38,8 +38,9 @@ pub use feature::{
 pub use handle::EthtoolHandle;
 pub use header::EthtoolHeader;
 pub use link_mode::{
-    EthtoolLinkModeAttr, EthtoolLinkModeDuplex, EthtoolLinkModeGetRequest,
-    EthtoolLinkModeHandle,
+    EthtoolLinkModeAttr, EthtoolLinkModeBit, EthtoolLinkModeDuplex,
+    EthtoolLinkModeHandle, EthtoolLinkModeOurs, EthtoolLinkModeRateMatching,
+    EthtoolLinkModeSpeed,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{
