@@ -2,8 +2,6 @@
 
 use futures::stream::TryStreamExt;
 
-// Once we find a way to load netsimdev kernel module in CI, we can convert this
-// to a test
 fn main() {
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_io()
