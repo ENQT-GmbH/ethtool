@@ -9,10 +9,7 @@ impl EthtoolCableTestHandle {
         EthtoolCableTestHandle(handle)
     }
 
-    pub fn action(
-        &mut self,
-        iface_name: &str,
-    ) -> EthtoolCableTestActionRequest {
+    pub fn start(&mut self, iface_name: &str) -> EthtoolCableTestActionRequest {
         EthtoolCableTestActionRequest::new(self.0.clone(), iface_name)
     }
 }

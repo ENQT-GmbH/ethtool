@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 mod bitset_util;
+mod cable_pair;
 mod cable_test;
 mod channel;
 mod coalesce;
@@ -20,6 +21,14 @@ mod tsinfo;
 pub use self::fec::{
     EthtoolFecAttr, EthtoolFecGetRequest, EthtoolFecHandle, EthtoolFecMode,
     EthtoolFecStat,
+};
+pub use cable_pair::EthtoolCablePair;
+pub use cable_test::{
+    EthtoolCableTestActionAttr, EthtoolCableTestActionRequest,
+    EthtoolCableTestFaultLengthAttr, EthtoolCableTestHandle,
+    EthtoolCableTestNestAttr, EthtoolCableTestNotifyAttr,
+    EthtoolCableTestResultAttr, EthtoolCableTestResultCode,
+    EthtoolCableTestSource, EthtoolCableTestStatus,
 };
 pub use channel::{
     EthtoolChannelAttr, EthtoolChannelGetRequest, EthtoolChannelHandle,
@@ -50,13 +59,6 @@ pub use pause::{
 pub use ring::{EthtoolRingAttr, EthtoolRingGetRequest, EthtoolRingHandle};
 pub use tsinfo::{
     EthtoolTsInfoAttr, EthtoolTsInfoGetRequest, EthtoolTsInfoHandle,
-};
-
-pub use cable_test::{
-    EthtoolCableTestActionRequest, EthtoolCableTestAttr,
-    EthtoolCableTestFaultLength, EthtoolCableTestHandle, EthtoolCableTestNest,
-    EthtoolCableTestPair, EthtoolCableTestResult, EthtoolCableTestResultCode,
-    EthtoolCableTestSource, EthtoolCableTestStatus,
 };
 
 pub(crate) use handle::ethtool_execute;

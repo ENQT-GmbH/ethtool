@@ -77,15 +77,6 @@ impl EthtoolHandle {
             EthtoolError::RequestFailed(format!("BUG: Request failed with {e}"))
         })
     }
-
-    pub async fn notify(
-        &mut self,
-        message: NetlinkMessage<GenlMessage<EthtoolMessage>>,
-    ) -> Result<(), EthtoolError> {
-        self.handle.notify(message).await.map_err(|e| {
-            EthtoolError::NotifyFailed(format!("Notify failed: {e}"))
-        })
-    }
 }
 
 pub(crate) async fn ethtool_execute(

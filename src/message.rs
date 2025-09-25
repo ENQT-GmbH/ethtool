@@ -4,7 +4,7 @@ use netlink_packet_core::{DecodeError, Emitable, Nla, ParseableParametrized};
 use netlink_packet_generic::{GenlFamily, GenlHeader};
 
 use crate::{
-    cable_test::{parse_cable_test_nlas, EthtoolCableTestAttr},
+    cable_test::parse_cable_test_notify_nlas,
     channel::{parse_channel_nlas, EthtoolChannelAttr},
     coalesce::{parse_coalesce_nlas, EthtoolCoalesceAttr},
     feature::{parse_feature_nlas, EthtoolFeatureAttr},
@@ -13,7 +13,7 @@ use crate::{
     pause::{parse_pause_nlas, EthtoolPauseAttr},
     ring::{parse_ring_nlas, EthtoolRingAttr},
     tsinfo::{parse_tsinfo_nlas, EthtoolTsInfoAttr},
-    EthtoolHeader,
+    EthtoolCableTestActionAttr, EthtoolCableTestNotifyAttr, EthtoolHeader,
 };
 
 const ETHTOOL_MSG_PAUSE_GET: u8 = 21;
@@ -95,7 +95,8 @@ pub enum EthtoolAttr {
     TsInfo(EthtoolTsInfoAttr),
     Fec(EthtoolFecAttr),
     Channel(EthtoolChannelAttr),
-    CableTest(EthtoolCableTestAttr),
+    CableTestAction(EthtoolCableTestActionAttr),
+    CableTestNotify(EthtoolCableTestNotifyAttr),
 }
 
 impl Nla for EthtoolAttr {
@@ -109,7 +110,8 @@ impl Nla for EthtoolAttr {
             Self::TsInfo(attr) => attr.value_len(),
             Self::Fec(attr) => attr.value_len(),
             Self::Channel(attr) => attr.value_len(),
-            Self::CableTest(attr) => attr.value_len(),
+            Self::CableTestAction(attr) => attr.value_len(),
+            Self::CableTestNotify(attr) => attr.value_len(),
         }
     }
 
@@ -123,7 +125,8 @@ impl Nla for EthtoolAttr {
             Self::TsInfo(attr) => attr.kind(),
             Self::Fec(attr) => attr.kind(),
             Self::Channel(attr) => attr.kind(),
-            Self::CableTest(attr) => attr.kind(),
+            Self::CableTestAction(attr) => attr.kind(),
+            Self::CableTestNotify(attr) => attr.kind(),
         }
     }
 
@@ -137,7 +140,8 @@ impl Nla for EthtoolAttr {
             Self::TsInfo(attr) => attr.emit_value(buffer),
             Self::Fec(attr) => attr.emit_value(buffer),
             Self::Channel(attr) => attr.emit_value(buffer),
-            Self::CableTest(attr) => attr.emit_value(buffer),
+            Self::CableTestAction(attr) => attr.emit_value(buffer),
+            Self::CableTestNotify(attr) => attr.emit_value(buffer),
         }
     }
 }
@@ -305,10 +309,11 @@ impl EthtoolMessage {
     }
 
     pub fn new_cable_test_action(iface_name: &str) -> Self {
-        let nlas =
-            vec![EthtoolAttr::CableTest(EthtoolCableTestAttr::Header(vec![
-                EthtoolHeader::DevName(iface_name.to_string()),
-            ]))];
+        let nlas = vec![EthtoolAttr::CableTestAction(
+            EthtoolCableTestActionAttr::Header(vec![EthtoolHeader::DevName(
+                iface_name.to_string(),
+            )]),
+        )];
 
         EthtoolMessage {
             cmd: EthtoolCmd::CableTestAction,
@@ -367,7 +372,7 @@ impl ParseableParametrized<[u8], GenlHeader> for EthtoolMessage {
             },
             ETHTOOL_MSG_CABLE_TEST_NTF => Self {
                 cmd: EthtoolCmd::CableTestNotify,
-                nlas: parse_cable_test_nlas(buffer)?,
+                nlas: parse_cable_test_notify_nlas(buffer)?,
             },
             cmd => {
                 return Err(DecodeError::from(format!(

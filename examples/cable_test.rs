@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-use std::{env, time::Duration};
-
 use anyhow::{Context, Result};
-use ethtool::{EthtoolCmd, EthtoolMessage};
+use ethtool::{EthtoolCmd, EthtoolError, EthtoolMessage};
 use futures::{StreamExt, TryStreamExt};
 use netlink_packet_core::{
     NetlinkMessage, NetlinkPayload, ParseableParametrized, NLM_F_REQUEST,
@@ -16,6 +14,7 @@ use netlink_packet_generic::{
     GenlFamily, GenlMessage,
 };
 use netlink_sys::AsyncSocket;
+use std::env;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
@@ -30,35 +29,44 @@ async fn main() -> Result<()> {
 }
 
 async fn cable_test(iface_name: &str) -> Result<()> {
-    // Obtain the multicast group ID for "monitor"
+    // Obtain the multicast group ID for "monitor".
     let multicast_id = get_multicast_id().await?;
     println!("Found Monitor Multicast Group with ID: {multicast_id}");
 
     // Set up a new ethtool netlink connection and subscribe to the multicast
-    // group
+    // group.
     let (mut connection, mut handle, mut messages) = ethtool::new_connection()?;
-    let socket = connection.socket_mut().socket_mut();
-    socket.bind_auto()?;
-    socket.add_membership(multicast_id)?;
+    {
+        let socket = connection.socket_mut().socket_mut();
+        socket.bind_auto()?;
+        socket.add_membership(multicast_id)?;
+    }
     tokio::spawn(connection);
 
-    // Start a cable test every 5 seconds
+    // Start the cable test.
     let iface = iface_name.to_string();
     tokio::spawn(async move {
-        loop {
-            let _ = handle.cable_test().action(&iface).execute().await;
-            tokio::time::sleep(Duration::from_secs(5)).await;
+        let mut stream = handle.cable_test().start(&iface).execute().await;
+        match stream.try_next().await {
+            Ok(_) => {
+                println!("Started Cable Test. This might take a few seconds.")
+            }
+            Err(e) => {
+                print_ethtool_error(e);
+                std::process::exit(1);
+            }
         }
     });
 
-    // Process incoming netlink messages, filtering for cable test notifications
+    // Process incoming netlink messages, filtering for cable test
+    // notifications.
     while let Some((msg, _)) = messages.next().await {
         if let NetlinkPayload::InnerMessage(inner) = &msg.payload {
             let ethtool_msg =
                 EthtoolMessage::parse_with_param(&inner.payload, inner.header)?;
 
             if ethtool_msg.cmd == EthtoolCmd::CableTestNotify {
-                println!("{ethtool_msg:?}");
+                dbg!(ethtool_msg);
             }
         }
     }
@@ -83,7 +91,7 @@ async fn get_multicast_id() -> Result<u32> {
         ethtool.handle.resolve_family_id::<EthtoolMessage>().await?;
     msg.header.flags = NLM_F_REQUEST;
 
-    // Receive response form control message request.
+    // Receive response from control message request.
     let responses = ethtool.handle.request(msg).await?;
 
     let monitor_id = responses.try_filter_map(async move |response| {
@@ -119,7 +127,7 @@ async fn get_multicast_id() -> Result<u32> {
                     }
                 }
 
-                (name == Some("monitor")).then_some(id?).or(None)
+                (name == Some("monitor")).then_some(id?)
             })
         });
 
@@ -132,6 +140,23 @@ async fn get_multicast_id() -> Result<u32> {
     .context("ethtool multicast monitor id not found")?;
 
     Ok(monitor_id)
+}
+
+fn print_ethtool_error(error: EthtoolError) {
+    match error {
+        EthtoolError::NetlinkError(message) => {
+            if let Some(code) = message.code {
+                let os_error = std::io::Error::from_raw_os_error(-code.get());
+                eprintln!(
+                    "Netlink error occurred: OS error code: {}",
+                    os_error
+                );
+            } else {
+                eprintln!("Netlink error occurred: Unknown error code");
+            }
+        }
+        _ => eprintln!("Other error occurred: {error:?}"),
+    }
 }
 
 fn usage() {
