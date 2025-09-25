@@ -36,11 +36,11 @@ pub use feature::{
     EthtoolFeatureHandle,
 };
 pub use handle::EthtoolHandle;
-pub use header::EthtoolHeader;
+pub use header::{EthtoolHeader, EthtoolHeaderFlags};
 pub use link_mode::{
     EthtoolLinkModeAttr, EthtoolLinkModeBit, EthtoolLinkModeDuplex,
-    EthtoolLinkModeHandle, EthtoolLinkModeOurs, EthtoolLinkModeRateMatching,
-    EthtoolLinkModeSpeed,
+    EthtoolLinkModeGetRequest, EthtoolLinkModeHandle, EthtoolLinkModeOurs,
+    EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{

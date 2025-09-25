@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-use crate::{
-    header::EthtoolHeaderFlag, EthtoolHandle, EthtoolLinkModeGetRequest,
-};
+use crate::{EthtoolHandle, EthtoolHeaderFlags, EthtoolLinkModeGetRequest};
 
 /// Handle for querying ethtool link mode information.
 pub struct EthtoolLinkModeHandle(pub(crate) EthtoolHandle);
@@ -22,7 +20,7 @@ impl EthtoolLinkModeHandle {
         &mut self,
         iface_name: Option<&str>,
     ) -> EthtoolLinkModeGetRequest {
-        EthtoolLinkModeGetRequest::new(self.0.clone(), iface_name, &[])
+        EthtoolLinkModeGetRequest::new(self.0.clone(), iface_name, None)
     }
 
     /// Retrieves the ethtool link modes (duplex, link speed, etc.) for an
@@ -37,7 +35,7 @@ impl EthtoolLinkModeHandle {
         EthtoolLinkModeGetRequest::new(
             self.0.clone(),
             iface_name,
-            &[EthtoolHeaderFlag::CompactBitsets],
+            Some(EthtoolHeaderFlags::COMPACT_BITSETS),
         )
     }
 }

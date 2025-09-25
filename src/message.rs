@@ -8,12 +8,11 @@ use crate::{
     coalesce::{parse_coalesce_nlas, EthtoolCoalesceAttr},
     feature::{parse_feature_nlas, EthtoolFeatureAttr},
     fec::{parse_fec_nlas, EthtoolFecAttr},
-    header::EthtoolHeaderFlag,
     link_mode::{parse_link_mode_nlas, EthtoolLinkModeAttr},
     pause::{parse_pause_nlas, EthtoolPauseAttr},
     ring::{parse_ring_nlas, EthtoolRingAttr},
     tsinfo::{parse_tsinfo_nlas, EthtoolTsInfoAttr},
-    EthtoolHeader,
+    EthtoolHeader, EthtoolHeaderFlags,
 };
 
 const ETHTOOL_MSG_PAUSE_GET: u8 = 21;
@@ -187,7 +186,7 @@ impl EthtoolMessage {
 
     pub fn new_link_mode_get(
         iface_name: Option<&str>,
-        flags: &[EthtoolHeaderFlag],
+        flags: Option<EthtoolHeaderFlags>,
     ) -> Self {
         let mut headers = Vec::new();
 
@@ -195,8 +194,8 @@ impl EthtoolMessage {
             headers.push(EthtoolHeader::DevName(name.to_string()));
         }
 
-        if !flags.is_empty() {
-            headers.push(EthtoolHeader::Flags(flags.to_vec()));
+        if let Some(flags) = flags {
+            headers.push(EthtoolHeader::Flags(flags.bits()));
         }
 
         EthtoolMessage {
