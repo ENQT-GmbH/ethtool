@@ -40,6 +40,7 @@ pub use header::{EthtoolHeader, EthtoolHeaderFlags};
 pub use link_mode::{
     EthtoolLinkModeAttr, EthtoolLinkModeBit, EthtoolLinkModeDuplex,
     EthtoolLinkModeGetRequest, EthtoolLinkModeHandle, EthtoolLinkModeOurs,
+    EthtoolLinkModeOursCompact, EthtoolLinkModeOursVerbose,
     EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};

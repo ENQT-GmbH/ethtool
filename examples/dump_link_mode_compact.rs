@@ -21,7 +21,7 @@ async fn get_link_mode_compact(iface_name: Option<&str>) -> Result<()> {
     }
     assert!(!msgs.is_empty());
     for msg in msgs {
-        dbg!(msg);
+        println!("{msg:#?}")
     }
 
     Ok(())

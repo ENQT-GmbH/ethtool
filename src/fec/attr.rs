@@ -6,10 +6,7 @@ use netlink_packet_core::{
     NLA_F_NESTED,
 };
 
-use crate::{
-    bitset_util::{parse_bitset_bits_nlas, EthtoolBitSet},
-    EthtoolAttr, EthtoolHeader,
-};
+use crate::{bitset_util::parse_bitset_nlas, EthtoolAttr, EthtoolHeader};
 
 const ETHTOOL_A_FEC_HEADER: u16 = 1;
 const ETHTOOL_A_FEC_MODES: u16 = 2;
@@ -88,12 +85,18 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                 Self::Header(nlas)
             }
             ETHTOOL_A_FEC_MODES => {
-                let bits = parse_bitset_bits_nlas(payload).context(format!(
+                let bits = parse_bitset_nlas(payload).context(format!(
                     "Invalid ETHTOOL_A_FEC_TIMESTAMPING {payload:?}"
                 ))?;
-                Self::Modes(
-                    bits.into_iter().map(EthtoolFecMode::from).collect(),
-                )
+
+                let modes = bits
+                    .get_entries()
+                    .into_iter()
+                    .filter(|(_, value)| *value)
+                    .map(|(index, _)| EthtoolFecMode::from(index))
+                    .collect();
+
+                Self::Modes(modes)
             }
             ETHTOOL_A_FEC_AUTO => Self::Auto(
                 parse_u8(payload).context(format!(
@@ -146,38 +149,17 @@ pub enum EthtoolFecMode {
     Rs,
     Baser,
     Llrs,
-    /// Index and name of FEC mode, only the index matters when setting.
-    Other(u32, String),
+    Other(u32),
 }
 
 impl std::fmt::Display for EthtoolFecMode {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}",
-            match self {
-                Self::None => "none",
-                Self::Rs => "rs",
-                Self::Baser => "baser",
-                Self::Llrs => "llrs",
-                Self::Other(_, n) => n.as_str(),
-            }
-        )
-    }
-}
-
-impl From<EthtoolBitSet> for EthtoolFecMode {
-    fn from(b: EthtoolBitSet) -> Self {
-        let EthtoolBitSet::Verbose(b) = b else {
-            unimplemented!("parsing FEC mode from a compact bitset is currently not supported");
-        };
-
-        match b.index {
-            ETHTOOL_LINK_MODE_FEC_NONE_BIT => Self::None,
-            ETHTOOL_LINK_MODE_FEC_RS_BIT => Self::Rs,
-            ETHTOOL_LINK_MODE_FEC_BASER_BIT => Self::Baser,
-            ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::Llrs,
-            _ => Self::Other(b.index, b.name),
+        match self {
+            Self::None => write!(f, "none"),
+            Self::Rs => write!(f, "rs"),
+            Self::Baser => write!(f, "baser"),
+            Self::Llrs => write!(f, "llrs"),
+            Self::Other(idx) => write!(f, "unknown({})", idx),
         }
     }
 }
@@ -189,7 +171,7 @@ impl From<u32> for EthtoolFecMode {
             ETHTOOL_LINK_MODE_FEC_RS_BIT => Self::Rs,
             ETHTOOL_LINK_MODE_FEC_BASER_BIT => Self::Baser,
             ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::Llrs,
-            _ => Self::Other(d, String::new()),
+            _ => Self::Other(d),
         }
     }
 }
@@ -201,7 +183,7 @@ impl From<EthtoolFecMode> for u32 {
             EthtoolFecMode::Rs => ETHTOOL_LINK_MODE_FEC_RS_BIT,
             EthtoolFecMode::Baser => ETHTOOL_LINK_MODE_FEC_BASER_BIT,
             EthtoolFecMode::Llrs => ETHTOOL_LINK_MODE_FEC_LLRS_BIT,
-            EthtoolFecMode::Other(d, _) => d,
+            EthtoolFecMode::Other(d) => d,
         }
     }
 }
