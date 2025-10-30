@@ -3,7 +3,6 @@
 use anyhow::Result;
 use ethtool::{EthtoolAttr, EthtoolExtSubstate, EthtoolLinkStateAttr};
 use futures::stream::TryStreamExt;
-use tokio_util::task::AbortOnDropHandle;
 
 fn main() {
     let rt = tokio::runtime::Builder::new_current_thread()
@@ -15,7 +14,7 @@ fn main() {
 
 async fn get_link_state(iface_name: Option<&str>) -> Result<()> {
     let (connection, mut handle, _) = ethtool::new_connection()?;
-    let _task = AbortOnDropHandle::new(tokio::spawn(connection));
+    tokio::spawn(connection);
 
     let mut link_state_handle =
         handle.link_state().get(iface_name).execute().await;
