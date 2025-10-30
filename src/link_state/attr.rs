@@ -5,7 +5,10 @@ use netlink_packet_core::{
     ErrorContext, Nla, NlaBuffer, NlasIterator, Parseable, NLA_F_NESTED,
 };
 
-use crate::{link_state::state::EthtoolExtState, EthtoolAttr, EthtoolHeader};
+use crate::{
+    link_state::state::{EthtoolExtState, EthtoolExtStateValue},
+    EthtoolAttr, EthtoolHeader,
+};
 
 const ETHTOOL_A_LINKSTATE_HEADER: u16 = 1;
 const ETHTOOL_A_LINKSTATE_LINK: u16 = 2;
@@ -22,7 +25,7 @@ pub enum EthtoolLinkStateAttr {
     Sqi(u32),
     SqiMax(u32),
     ExtState(EthtoolExtState),
-    ExtSubstate(u8),
+    ExtSubstate(EthtoolExtStateValue),
     ExtDownCounter(u32),
     Other(DefaultNla),
 }

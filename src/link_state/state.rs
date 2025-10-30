@@ -40,6 +40,8 @@ const ETHTOOL_LINK_EXT_SUBSTATE_CI_CABLE_TEST_FAILURE: u8 = 2;
 
 const ETHTOOL_LINK_EXT_SUBSTATE_MODULE_CMIS_NOT_READY: u8 = 1;
 
+pub type EthtoolExtStateValue = u8;
+
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum EthtoolExtState {
     Autoneg,
@@ -295,21 +297,30 @@ impl From<u8> for EthtoolExtSubstateModule {
     }
 }
 
-impl EthtoolExtState {
-    pub fn resolve_substate(&self, substate: u8) -> EthtoolExtSubstate {
-        match self {
-            Self::Autoneg => EthtoolExtSubstate::Autoneg(substate.into()),
-            Self::LinkTraining => {
+impl EthtoolExtSubstate {
+    pub fn from_state_pair(
+        state: EthtoolExtState,
+        substate: EthtoolExtStateValue,
+    ) -> EthtoolExtSubstate {
+        match state {
+            EthtoolExtState::Autoneg => {
+                EthtoolExtSubstate::Autoneg(substate.into())
+            }
+            EthtoolExtState::LinkTraining => {
                 EthtoolExtSubstate::LinkTraining(substate.into())
             }
-            Self::LinkLogicalMismatch => {
+            EthtoolExtState::LinkLogicalMismatch => {
                 EthtoolExtSubstate::LinkLogicalMismatch(substate.into())
             }
-            Self::BadSignalIntegrity => {
+            EthtoolExtState::BadSignalIntegrity => {
                 EthtoolExtSubstate::BadSignalIntegrity(substate.into())
             }
-            Self::CableIssue => EthtoolExtSubstate::CableIssue(substate.into()),
-            Self::Module => EthtoolExtSubstate::Module(substate.into()),
+            EthtoolExtState::CableIssue => {
+                EthtoolExtSubstate::CableIssue(substate.into())
+            }
+            EthtoolExtState::Module => {
+                EthtoolExtSubstate::Module(substate.into())
+            }
             _ => EthtoolExtSubstate::Other(substate),
         }
     }
