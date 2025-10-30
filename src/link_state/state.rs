@@ -40,7 +40,7 @@ const ETHTOOL_LINK_EXT_SUBSTATE_CI_CABLE_TEST_FAILURE: u8 = 2;
 
 const ETHTOOL_LINK_EXT_SUBSTATE_MODULE_CMIS_NOT_READY: u8 = 1;
 
-pub type EthtoolExtStateValue = u8;
+pub type EthtoolExtSubstateValue = u8;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum EthtoolExtState {
@@ -300,7 +300,7 @@ impl From<u8> for EthtoolExtSubstateModule {
 impl EthtoolExtSubstate {
     pub fn from_state_pair(
         state: EthtoolExtState,
-        substate: EthtoolExtStateValue,
+        substate: EthtoolExtSubstateValue,
     ) -> EthtoolExtSubstate {
         match state {
             EthtoolExtState::Autoneg => {

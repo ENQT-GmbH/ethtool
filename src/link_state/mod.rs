@@ -10,8 +10,8 @@ pub use attr::EthtoolLinkStateAttr;
 pub use get::EthtoolLinkStateGetRequest;
 pub use handle::EthtoolLinkStateHandle;
 pub use state::{
-    EthtoolExtState, EthtoolExtStateValue, EthtoolExtSubstate,
-    EthtoolExtSubstateAutoneg, EthtoolExtSubstateBadSignalIntegrity,
-    EthtoolExtSubstateCableIssue, EthtoolExtSubstateLinkLogicalMismatch,
-    EthtoolExtSubstateLinkTraining, EthtoolExtSubstateModule,
+    EthtoolExtState, EthtoolExtSubstate, EthtoolExtSubstateAutoneg,
+    EthtoolExtSubstateBadSignalIntegrity, EthtoolExtSubstateCableIssue,
+    EthtoolExtSubstateLinkLogicalMismatch, EthtoolExtSubstateLinkTraining,
+    EthtoolExtSubstateModule, EthtoolExtSubstateValue,
 };

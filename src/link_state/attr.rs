@@ -6,7 +6,7 @@ use netlink_packet_core::{
 };
 
 use crate::{
-    link_state::state::{EthtoolExtState, EthtoolExtStateValue},
+    link_state::state::{EthtoolExtState, EthtoolExtSubstateValue},
     EthtoolAttr, EthtoolHeader,
 };
 
@@ -25,7 +25,7 @@ pub enum EthtoolLinkStateAttr {
     Sqi(u32),
     SqiMax(u32),
     ExtState(EthtoolExtState),
-    ExtSubstate(EthtoolExtStateValue),
+    ExtSubstate(EthtoolExtSubstateValue),
     ExtDownCounter(u32),
     Other(DefaultNla),
 }
