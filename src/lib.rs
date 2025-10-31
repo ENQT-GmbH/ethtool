@@ -2,6 +2,7 @@
 
 mod bitset_util;
 mod cable_pair;
+mod cable_test;
 mod cable_test_tdr;
 mod channel;
 mod coalesce;
@@ -23,6 +24,13 @@ pub use self::fec::{
     EthtoolFecStat,
 };
 pub use cable_pair::EthtoolCablePair;
+pub use cable_test::{
+    EthtoolCableTestActionAttr, EthtoolCableTestActionRequest,
+    EthtoolCableTestFaultLengthAttr, EthtoolCableTestHandle,
+    EthtoolCableTestNestAttr, EthtoolCableTestNotifyAttr,
+    EthtoolCableTestResultAttr, EthtoolCableTestResultCode,
+    EthtoolCableTestSource, EthtoolCableTestStatus,
+};
 pub use cable_test_tdr::{
     EthtoolCableTestTdrActionAttr, EthtoolCableTestTdrActionRequest,
     EthtoolCableTestTdrAmplitudeAttr, EthtoolCableTestTdrConfig,
