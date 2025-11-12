@@ -7,9 +7,9 @@ mod mode_bit;
 
 pub(crate) use attr::parse_link_mode_nlas;
 pub use attr::{
-    EthtoolLinkModeAttr, EthtoolLinkModeDuplex, EthtoolLinkMode,
-    EthtoolLinkModeCompact, EthtoolLinkModeVerbose,
-    EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
+    EthtoolLinkMode, EthtoolLinkModeAttr, EthtoolLinkModeCompact,
+    EthtoolLinkModeDuplex, EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
+    EthtoolLinkModeVerbose,
 };
 pub use get::EthtoolLinkModeGetRequest;
 pub use handle::EthtoolLinkModeHandle;
