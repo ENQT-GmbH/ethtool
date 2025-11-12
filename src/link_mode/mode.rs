@@ -138,7 +138,7 @@ pub enum EthtoolLinkMode {
     FecNone,
     FecRs,
     FecBaseR,
-    FecFecLlrs,
+    FecLlrs,
     Fec10000BaseR,
 
     Phy10BaseTHalf,
@@ -399,7 +399,7 @@ impl From<u32> for EthtoolLinkMode {
             ETHTOOL_LINK_MODE_400000BASECR8_FULL_BIT => {
                 Self::Phy400000BaseCR8Full
             }
-            ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::FecFecLlrs,
+            ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::FecLlrs,
             ETHTOOL_LINK_MODE_100000BASEKR_FULL_BIT => {
                 Self::Phy100000BaseKRFull
             }
