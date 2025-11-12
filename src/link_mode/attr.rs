@@ -69,6 +69,15 @@ pub enum EthtoolLinkMode {
     Compact(Vec<EthtoolLinkModeCompact>),
 }
 
+impl EthtoolLinkMode {
+    pub fn get_bits(&self) -> Vec<EthtoolLinkModeBit> {
+        match self {
+            Self::Verbose(modes) => modes.iter().map(|mode| mode.bit).collect(),
+            Self::Compact(modes) => modes.iter().map(|mode| mode.bit).collect(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum EthtoolLinkModeDuplex {
     Half,
