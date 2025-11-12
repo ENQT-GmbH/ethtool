@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 mod bitset_util;
+mod cable_pair;
+mod cable_test;
+mod cable_test_tdr;
 mod channel;
 mod coalesce;
 mod connection;
@@ -19,6 +22,22 @@ mod tsinfo;
 pub use self::fec::{
     EthtoolFecAttr, EthtoolFecGetRequest, EthtoolFecHandle, EthtoolFecMode,
     EthtoolFecStat,
+};
+pub use cable_pair::EthtoolCablePair;
+pub use cable_test::{
+    EthtoolCableTestActionAttr, EthtoolCableTestActionRequest,
+    EthtoolCableTestFaultLengthAttr, EthtoolCableTestHandle,
+    EthtoolCableTestNestAttr, EthtoolCableTestNotifyAttr,
+    EthtoolCableTestResultAttr, EthtoolCableTestResultCode,
+    EthtoolCableTestSource, EthtoolCableTestStatus,
+};
+pub use cable_test_tdr::{
+    EthtoolCableTestTdrActionAttr, EthtoolCableTestTdrActionRequest,
+    EthtoolCableTestTdrAmplitudeAttr, EthtoolCableTestTdrConfig,
+    EthtoolCableTestTdrConfigAttr, EthtoolCableTestTdrHandle,
+    EthtoolCableTestTdrNestAttr, EthtoolCableTestTdrNotifyAttr,
+    EthtoolCableTestTdrPulseAttr, EthtoolCableTestTdrStatus,
+    EthtoolCableTestTdrStepAttr,
 };
 pub use channel::{
     EthtoolChannelAttr, EthtoolChannelGetRequest, EthtoolChannelHandle,
