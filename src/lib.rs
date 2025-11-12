@@ -39,8 +39,8 @@ pub use handle::EthtoolHandle;
 pub use header::{EthtoolHeader, EthtoolHeaderFlags};
 pub use link_mode::{
     EthtoolLinkModeAttr, EthtoolLinkModeBit, EthtoolLinkModeDuplex,
-    EthtoolLinkModeGetRequest, EthtoolLinkModeHandle, EthtoolLinkModeOurs,
-    EthtoolLinkModeOursCompact, EthtoolLinkModeOursVerbose,
+    EthtoolLinkModeGetRequest, EthtoolLinkModeHandle, EthtoolLinkMode,
+    EthtoolLinkModeCompact, EthtoolLinkModeVerbose,
     EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
