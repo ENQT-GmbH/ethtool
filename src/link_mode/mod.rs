@@ -3,14 +3,14 @@
 mod attr;
 mod get;
 mod handle;
-mod mode_bit;
+mod mode;
 
 pub(crate) use attr::parse_link_mode_nlas;
 pub use attr::{
-    EthtoolLinkMode, EthtoolLinkModeAttr, EthtoolLinkModeCompact,
+    EthtoolLinkModeAttr, EthtoolLinkModeBitset, EthtoolLinkModeCompactBit,
     EthtoolLinkModeDuplex, EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
-    EthtoolLinkModeVerbose,
+    EthtoolLinkModeVerboseBit,
 };
 pub use get::EthtoolLinkModeGetRequest;
 pub use handle::EthtoolLinkModeHandle;
-pub use mode_bit::EthtoolLinkModeBit;
+pub use mode::EthtoolLinkMode;

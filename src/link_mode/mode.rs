@@ -123,404 +123,408 @@ const ETHTOOL_LINK_MODE_800000BASESR4_FULL_BIT: u32 = 119;
 const ETHTOOL_LINK_MODE_800000BASEVR4_FULL_BIT: u32 = 120;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum EthtoolLinkModeBit {
-    Bit10BaseTHalf,
-    Bit10BaseTFull,
-    Bit100BaseTHalf,
-    Bit100BaseTFull,
-    Bit1000BaseTHalf,
-    Bit1000BaseTFull,
-    BitAutoneg,
-    BitTp,
-    BitAui,
-    BitMii,
-    BitFibre,
-    BitBnc,
-    Bit10000BaseTFull,
-    BitPause,
-    BitAsymPause,
-    Bit2500BaseXFull,
-    BitBackplane,
-    Bit1000BaseKXFull,
-    Bit10000BaseKX4Full,
-    Bit10000BaseKRFull,
-    Bit10000BaseRFec,
-    Bit20000BaseMLD2Full,
-    Bit20000BaseKR2Full,
-    Bit40000BaseKR4Full,
-    Bit40000BaseCR4Full,
-    Bit40000BaseSR4Full,
-    Bit40000BaseLR4Full,
-    Bit56000BaseKR4Full,
-    Bit56000BaseCR4Full,
-    Bit56000BaseSR4Full,
-    Bit56000BaseLR4Full,
-    Bit25000BaseCRFull,
-    Bit25000BaseKRFull,
-    Bit25000BaseSRFull,
-    Bit50000BaseCR2Full,
-    Bit50000BaseKR2Full,
-    Bit100000BaseKR4Full,
-    Bit100000BaseSR4Full,
-    Bit100000BaseCR4Full,
-    Bit100000BaseLR4Er4Full,
-    Bit50000BaseSR2Full,
-    Bit1000BaseXFull,
-    Bit10000BaseCRFull,
-    Bit10000BaseSRFull,
-    Bit10000BaseLRFull,
-    Bit10000BaseLRmFull,
-    Bit10000BaseERFull,
-    Bit2500BaseTFull,
-    Bit5000BaseTFull,
-    BitFecNone,
-    BitFecRs,
-    BitFecBaseR,
-    Bit50000BaseKRFull,
-    Bit50000BaseSRFull,
-    Bit50000BaseCRFull,
-    Bit50000BaseLRErFrFull,
-    Bit50000BaseDRFull,
-    Bit100000BaseKR2Full,
-    Bit100000BaseSR2Full,
-    Bit100000BaseCR2Full,
-    Bit100000BaseLR2Er2Fr2Full,
-    Bit100000BaseDR2Full,
-    Bit200000BaseKR4Full,
-    Bit200000BaseSR4Full,
-    Bit200000BaseLR4Er4Fr4Full,
-    Bit200000BaseDR4Full,
-    Bit200000BaseCR4Full,
-    Bit100BaseT1Full,
-    Bit1000BaseT1Full,
-    Bit400000BaseKR8Full,
-    Bit400000BaseSR8Full,
-    Bit400000BaseLR8Er8Fr8Full,
-    Bit400000BaseDR8Full,
-    Bit400000BaseCR8Full,
-    BitFecLlrs,
-    Bit100000BaseKRFull,
-    Bit100000BaseSRFull,
-    Bit100000BaseLRErFrFull,
-    Bit100000BaseCRFull,
-    Bit100000BaseDRFull,
-    Bit200000BaseKR2Full,
-    Bit200000BaseSR2Full,
-    Bit200000BaseLR2Er2Fr2Full,
-    Bit200000BaseDR2Full,
-    Bit200000BaseCR2Full,
-    Bit400000BaseKR4Full,
-    Bit400000BaseSR4Full,
-    Bit400000BaseLR4Er4Fr4Full,
-    Bit400000BaseDR4Full,
-    Bit400000BaseCR4Full,
-    Bit100BaseFXHalf,
-    Bit100BaseFXFull,
-    Bit10BaseT1LFull,
-    Bit800000BaseCR8Full,
-    Bit800000BaseKR8Full,
-    Bit800000BaseDR8Full,
-    Bit800000BaseDR8V2Full,
-    Bit800000BaseSR8Full,
-    Bit800000BaseVR8Full,
-    Bit10BaseT1SFull,
-    Bit10BaseT1SHalf,
-    Bit10BaseT1SP2MpHalf,
-    Bit10BaseT1BrrFull,
-    Bit200000BaseCRFull,
-    Bit200000BaseKRFull,
-    Bit200000BaseDRFull,
-    Bit200000BaseDRV2Full,
-    Bit200000BaseSRFull,
-    Bit200000BaseVRFull,
-    Bit400000BaseCR2Full,
-    Bit400000BaseKR2Full,
-    Bit400000BaseDR2Full,
-    Bit400000BaseDR2V2Full,
-    Bit400000BaseSR2Full,
-    Bit400000BaseVR2Full,
-    Bit800000BaseCR4Full,
-    Bit800000BaseKR4Full,
-    Bit800000BaseDR4Full,
-    Bit800000BaseDR4V2Full,
-    Bit800000BaseSR4Full,
-    Bit800000BaseVR4Full,
+pub enum EthtoolLinkMode {
+    Pause,
+    AsymPause,
+    Autoneg,
+
+    PortTp,
+    PortAui,
+    PortMii,
+    PortFibre,
+    PortBnc,
+    PortBackplane,
+
+    FecNone,
+    FecRs,
+    FecBaseR,
+    FecFecLlrs,
+    Fec10000BaseR,
+
+    Phy10BaseTHalf,
+    Phy10BaseTFull,
+    Phy100BaseTHalf,
+    Phy100BaseTFull,
+    Phy1000BaseTHalf,
+    Phy1000BaseTFull,
+    Phy10000BaseTFull,
+    Phy2500BaseXFull,
+    Phy1000BaseKXFull,
+    Phy10000BaseKX4Full,
+    Phy10000BaseKRFull,
+    Phy20000BaseMLD2Full,
+    Phy20000BaseKR2Full,
+    Phy40000BaseKR4Full,
+    Phy40000BaseCR4Full,
+    Phy40000BaseSR4Full,
+    Phy40000BaseLR4Full,
+    Phy56000BaseKR4Full,
+    Phy56000BaseCR4Full,
+    Phy56000BaseSR4Full,
+    Phy56000BaseLR4Full,
+    Phy25000BaseCRFull,
+    Phy25000BaseKRFull,
+    Phy25000BaseSRFull,
+    Phy50000BaseCR2Full,
+    Phy50000BaseKR2Full,
+    Phy100000BaseKR4Full,
+    Phy100000BaseSR4Full,
+    Phy100000BaseCR4Full,
+    Phy100000BaseLR4Er4Full,
+    Phy50000BaseSR2Full,
+    Phy1000BaseXFull,
+    Phy10000BaseCRFull,
+    Phy10000BaseSRFull,
+    Phy10000BaseLRFull,
+    Phy10000BaseLRmFull,
+    Phy10000BaseERFull,
+    Phy2500BaseTFull,
+    Phy5000BaseTFull,
+    Phy50000BaseKRFull,
+    Phy50000BaseSRFull,
+    Phy50000BaseCRFull,
+    Phy50000BaseLRErFrFull,
+    Phy50000BaseDRFull,
+    Phy100000BaseKR2Full,
+    Phy100000BaseSR2Full,
+    Phy100000BaseCR2Full,
+    Phy100000BaseLR2Er2Fr2Full,
+    Phy100000BaseDR2Full,
+    Phy200000BaseKR4Full,
+    Phy200000BaseSR4Full,
+    Phy200000BaseLR4Er4Fr4Full,
+    Phy200000BaseDR4Full,
+    Phy200000BaseCR4Full,
+    Phy100BaseT1Full,
+    Phy1000BaseT1Full,
+    Phy400000BaseKR8Full,
+    Phy400000BaseSR8Full,
+    Phy400000BaseLR8Er8Fr8Full,
+    Phy400000BaseDR8Full,
+    Phy400000BaseCR8Full,
+    Phy100000BaseKRFull,
+    Phy100000BaseSRFull,
+    Phy100000BaseLRErFrFull,
+    Phy100000BaseCRFull,
+    Phy100000BaseDRFull,
+    Phy200000BaseKR2Full,
+    Phy200000BaseSR2Full,
+    Phy200000BaseLR2Er2Fr2Full,
+    Phy200000BaseDR2Full,
+    Phy200000BaseCR2Full,
+    Phy400000BaseKR4Full,
+    Phy400000BaseSR4Full,
+    Phy400000BaseLR4Er4Fr4Full,
+    Phy400000BaseDR4Full,
+    Phy400000BaseCR4Full,
+    Phy100BaseFXHalf,
+    Phy100BaseFXFull,
+    Phy10BaseT1LFull,
+    Phy800000BaseCR8Full,
+    Phy800000BaseKR8Full,
+    Phy800000BaseDR8Full,
+    Phy800000BaseDR8V2Full,
+    Phy800000BaseSR8Full,
+    Phy800000BaseVR8Full,
+    Phy10BaseT1SFull,
+    Phy10BaseT1SHalf,
+    Phy10BaseT1SP2MpHalf,
+    Phy10BaseT1BrrFull,
+    Phy200000BaseCRFull,
+    Phy200000BaseKRFull,
+    Phy200000BaseDRFull,
+    Phy200000BaseDRV2Full,
+    Phy200000BaseSRFull,
+    Phy200000BaseVRFull,
+    Phy400000BaseCR2Full,
+    Phy400000BaseKR2Full,
+    Phy400000BaseDR2Full,
+    Phy400000BaseDR2V2Full,
+    Phy400000BaseSR2Full,
+    Phy400000BaseVR2Full,
+    Phy800000BaseCR4Full,
+    Phy800000BaseKR4Full,
+    Phy800000BaseDR4Full,
+    Phy800000BaseDR4V2Full,
+    Phy800000BaseSR4Full,
+    Phy800000BaseVR4Full,
+
     Other(u32),
 }
 
-impl From<u32> for EthtoolLinkModeBit {
+impl From<u32> for EthtoolLinkMode {
     fn from(value: u32) -> Self {
         match value {
-            ETHTOOL_LINK_MODE_10BASET_HALF_BIT => Self::Bit10BaseTHalf,
-            ETHTOOL_LINK_MODE_10BASET_FULL_BIT => Self::Bit10BaseTFull,
-            ETHTOOL_LINK_MODE_100BASET_HALF_BIT => Self::Bit100BaseTHalf,
-            ETHTOOL_LINK_MODE_100BASET_FULL_BIT => Self::Bit100BaseTFull,
-            ETHTOOL_LINK_MODE_1000BASET_HALF_BIT => Self::Bit1000BaseTHalf,
-            ETHTOOL_LINK_MODE_1000BASET_FULL_BIT => Self::Bit1000BaseTFull,
-            ETHTOOL_LINK_MODE_AUTONEG_BIT => Self::BitAutoneg,
-            ETHTOOL_LINK_MODE_TP_BIT => Self::BitTp,
-            ETHTOOL_LINK_MODE_AUI_BIT => Self::BitAui,
-            ETHTOOL_LINK_MODE_MII_BIT => Self::BitMii,
-            ETHTOOL_LINK_MODE_FIBRE_BIT => Self::BitFibre,
-            ETHTOOL_LINK_MODE_BNC_BIT => Self::BitBnc,
-            ETHTOOL_LINK_MODE_10000BASET_FULL_BIT => Self::Bit10000BaseTFull,
-            ETHTOOL_LINK_MODE_PAUSE_BIT => Self::BitPause,
-            ETHTOOL_LINK_MODE_ASYM_PAUSE_BIT => Self::BitAsymPause,
-            ETHTOOL_LINK_MODE_2500BASEX_FULL_BIT => Self::Bit2500BaseXFull,
-            ETHTOOL_LINK_MODE_BACKPLANE_BIT => Self::BitBackplane,
-            ETHTOOL_LINK_MODE_1000BASEKX_FULL_BIT => Self::Bit1000BaseKXFull,
+            ETHTOOL_LINK_MODE_10BASET_HALF_BIT => Self::Phy10BaseTHalf,
+            ETHTOOL_LINK_MODE_10BASET_FULL_BIT => Self::Phy10BaseTFull,
+            ETHTOOL_LINK_MODE_100BASET_HALF_BIT => Self::Phy100BaseTHalf,
+            ETHTOOL_LINK_MODE_100BASET_FULL_BIT => Self::Phy100BaseTFull,
+            ETHTOOL_LINK_MODE_1000BASET_HALF_BIT => Self::Phy1000BaseTHalf,
+            ETHTOOL_LINK_MODE_1000BASET_FULL_BIT => Self::Phy1000BaseTFull,
+            ETHTOOL_LINK_MODE_AUTONEG_BIT => Self::Autoneg,
+            ETHTOOL_LINK_MODE_TP_BIT => Self::PortTp,
+            ETHTOOL_LINK_MODE_AUI_BIT => Self::PortAui,
+            ETHTOOL_LINK_MODE_MII_BIT => Self::PortMii,
+            ETHTOOL_LINK_MODE_FIBRE_BIT => Self::PortFibre,
+            ETHTOOL_LINK_MODE_BNC_BIT => Self::PortBnc,
+            ETHTOOL_LINK_MODE_10000BASET_FULL_BIT => Self::Phy10000BaseTFull,
+            ETHTOOL_LINK_MODE_PAUSE_BIT => Self::Pause,
+            ETHTOOL_LINK_MODE_ASYM_PAUSE_BIT => Self::AsymPause,
+            ETHTOOL_LINK_MODE_2500BASEX_FULL_BIT => Self::Phy2500BaseXFull,
+            ETHTOOL_LINK_MODE_BACKPLANE_BIT => Self::PortBackplane,
+            ETHTOOL_LINK_MODE_1000BASEKX_FULL_BIT => Self::Phy1000BaseKXFull,
             ETHTOOL_LINK_MODE_10000BASEKX4_FULL_BIT => {
-                Self::Bit10000BaseKX4Full
+                Self::Phy10000BaseKX4Full
             }
-            ETHTOOL_LINK_MODE_10000BASEKR_FULL_BIT => Self::Bit10000BaseKRFull,
-            ETHTOOL_LINK_MODE_10000BASER_FEC_BIT => Self::Bit10000BaseRFec,
+            ETHTOOL_LINK_MODE_10000BASEKR_FULL_BIT => Self::Phy10000BaseKRFull,
+            ETHTOOL_LINK_MODE_10000BASER_FEC_BIT => Self::Fec10000BaseR,
             ETHTOOL_LINK_MODE_20000BASEMLD2_FULL_BIT => {
-                Self::Bit20000BaseMLD2Full
+                Self::Phy20000BaseMLD2Full
             }
             ETHTOOL_LINK_MODE_20000BASEKR2_FULL_BIT => {
-                Self::Bit20000BaseKR2Full
+                Self::Phy20000BaseKR2Full
             }
             ETHTOOL_LINK_MODE_40000BASEKR4_FULL_BIT => {
-                Self::Bit40000BaseKR4Full
+                Self::Phy40000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_40000BASECR4_FULL_BIT => {
-                Self::Bit40000BaseCR4Full
+                Self::Phy40000BaseCR4Full
             }
             ETHTOOL_LINK_MODE_40000BASESR4_FULL_BIT => {
-                Self::Bit40000BaseSR4Full
+                Self::Phy40000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_40000BASELR4_FULL_BIT => {
-                Self::Bit40000BaseLR4Full
+                Self::Phy40000BaseLR4Full
             }
             ETHTOOL_LINK_MODE_56000BASEKR4_FULL_BIT => {
-                Self::Bit56000BaseKR4Full
+                Self::Phy56000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_56000BASECR4_FULL_BIT => {
-                Self::Bit56000BaseCR4Full
+                Self::Phy56000BaseCR4Full
             }
             ETHTOOL_LINK_MODE_56000BASESR4_FULL_BIT => {
-                Self::Bit56000BaseSR4Full
+                Self::Phy56000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_56000BASELR4_FULL_BIT => {
-                Self::Bit56000BaseLR4Full
+                Self::Phy56000BaseLR4Full
             }
-            ETHTOOL_LINK_MODE_25000BASECR_FULL_BIT => Self::Bit25000BaseCRFull,
-            ETHTOOL_LINK_MODE_25000BASEKR_FULL_BIT => Self::Bit25000BaseKRFull,
-            ETHTOOL_LINK_MODE_25000BASESR_FULL_BIT => Self::Bit25000BaseSRFull,
+            ETHTOOL_LINK_MODE_25000BASECR_FULL_BIT => Self::Phy25000BaseCRFull,
+            ETHTOOL_LINK_MODE_25000BASEKR_FULL_BIT => Self::Phy25000BaseKRFull,
+            ETHTOOL_LINK_MODE_25000BASESR_FULL_BIT => Self::Phy25000BaseSRFull,
             ETHTOOL_LINK_MODE_50000BASECR2_FULL_BIT => {
-                Self::Bit50000BaseCR2Full
+                Self::Phy50000BaseCR2Full
             }
             ETHTOOL_LINK_MODE_50000BASEKR2_FULL_BIT => {
-                Self::Bit50000BaseKR2Full
+                Self::Phy50000BaseKR2Full
             }
             ETHTOOL_LINK_MODE_100000BASEKR4_FULL_BIT => {
-                Self::Bit100000BaseKR4Full
+                Self::Phy100000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_100000BASESR4_FULL_BIT => {
-                Self::Bit100000BaseSR4Full
+                Self::Phy100000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_100000BASECR4_FULL_BIT => {
-                Self::Bit100000BaseCR4Full
+                Self::Phy100000BaseCR4Full
             }
             ETHTOOL_LINK_MODE_100000BASELR4_ER4_FULL_BIT => {
-                Self::Bit100000BaseLR4Er4Full
+                Self::Phy100000BaseLR4Er4Full
             }
             ETHTOOL_LINK_MODE_50000BASESR2_FULL_BIT => {
-                Self::Bit50000BaseSR2Full
+                Self::Phy50000BaseSR2Full
             }
-            ETHTOOL_LINK_MODE_1000BASEX_FULL_BIT => Self::Bit1000BaseXFull,
-            ETHTOOL_LINK_MODE_10000BASECR_FULL_BIT => Self::Bit10000BaseCRFull,
-            ETHTOOL_LINK_MODE_10000BASESR_FULL_BIT => Self::Bit10000BaseSRFull,
-            ETHTOOL_LINK_MODE_10000BASELR_FULL_BIT => Self::Bit10000BaseLRFull,
+            ETHTOOL_LINK_MODE_1000BASEX_FULL_BIT => Self::Phy1000BaseXFull,
+            ETHTOOL_LINK_MODE_10000BASECR_FULL_BIT => Self::Phy10000BaseCRFull,
+            ETHTOOL_LINK_MODE_10000BASESR_FULL_BIT => Self::Phy10000BaseSRFull,
+            ETHTOOL_LINK_MODE_10000BASELR_FULL_BIT => Self::Phy10000BaseLRFull,
             ETHTOOL_LINK_MODE_10000BASELRM_FULL_BIT => {
-                Self::Bit10000BaseLRmFull
+                Self::Phy10000BaseLRmFull
             }
-            ETHTOOL_LINK_MODE_10000BASEER_FULL_BIT => Self::Bit10000BaseERFull,
-            ETHTOOL_LINK_MODE_2500BASET_FULL_BIT => Self::Bit2500BaseTFull,
-            ETHTOOL_LINK_MODE_5000BASET_FULL_BIT => Self::Bit5000BaseTFull,
-            ETHTOOL_LINK_MODE_FEC_NONE_BIT => Self::BitFecNone,
-            ETHTOOL_LINK_MODE_FEC_RS_BIT => Self::BitFecRs,
-            ETHTOOL_LINK_MODE_FEC_BASER_BIT => Self::BitFecBaseR,
-            ETHTOOL_LINK_MODE_50000BASEKR_FULL_BIT => Self::Bit50000BaseKRFull,
-            ETHTOOL_LINK_MODE_50000BASESR_FULL_BIT => Self::Bit50000BaseSRFull,
-            ETHTOOL_LINK_MODE_50000BASECR_FULL_BIT => Self::Bit50000BaseCRFull,
+            ETHTOOL_LINK_MODE_10000BASEER_FULL_BIT => Self::Phy10000BaseERFull,
+            ETHTOOL_LINK_MODE_2500BASET_FULL_BIT => Self::Phy2500BaseTFull,
+            ETHTOOL_LINK_MODE_5000BASET_FULL_BIT => Self::Phy5000BaseTFull,
+            ETHTOOL_LINK_MODE_FEC_NONE_BIT => Self::FecNone,
+            ETHTOOL_LINK_MODE_FEC_RS_BIT => Self::FecRs,
+            ETHTOOL_LINK_MODE_FEC_BASER_BIT => Self::FecBaseR,
+            ETHTOOL_LINK_MODE_50000BASEKR_FULL_BIT => Self::Phy50000BaseKRFull,
+            ETHTOOL_LINK_MODE_50000BASESR_FULL_BIT => Self::Phy50000BaseSRFull,
+            ETHTOOL_LINK_MODE_50000BASECR_FULL_BIT => Self::Phy50000BaseCRFull,
             ETHTOOL_LINK_MODE_50000BASELR_ER_FR_FULL_BIT => {
-                Self::Bit50000BaseLRErFrFull
+                Self::Phy50000BaseLRErFrFull
             }
-            ETHTOOL_LINK_MODE_50000BASEDR_FULL_BIT => Self::Bit50000BaseDRFull,
+            ETHTOOL_LINK_MODE_50000BASEDR_FULL_BIT => Self::Phy50000BaseDRFull,
             ETHTOOL_LINK_MODE_100000BASEKR2_FULL_BIT => {
-                Self::Bit100000BaseKR2Full
+                Self::Phy100000BaseKR2Full
             }
             ETHTOOL_LINK_MODE_100000BASESR2_FULL_BIT => {
-                Self::Bit100000BaseSR2Full
+                Self::Phy100000BaseSR2Full
             }
             ETHTOOL_LINK_MODE_100000BASECR2_FULL_BIT => {
-                Self::Bit100000BaseCR2Full
+                Self::Phy100000BaseCR2Full
             }
             ETHTOOL_LINK_MODE_100000BASELR2_ER2_FR2_FULL_BIT => {
-                Self::Bit100000BaseLR2Er2Fr2Full
+                Self::Phy100000BaseLR2Er2Fr2Full
             }
             ETHTOOL_LINK_MODE_100000BASEDR2_FULL_BIT => {
-                Self::Bit100000BaseDR2Full
+                Self::Phy100000BaseDR2Full
             }
             ETHTOOL_LINK_MODE_200000BASEKR4_FULL_BIT => {
-                Self::Bit200000BaseKR4Full
+                Self::Phy200000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_200000BASESR4_FULL_BIT => {
-                Self::Bit200000BaseSR4Full
+                Self::Phy200000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_200000BASELR4_ER4_FR4_FULL_BIT => {
-                Self::Bit200000BaseLR4Er4Fr4Full
+                Self::Phy200000BaseLR4Er4Fr4Full
             }
             ETHTOOL_LINK_MODE_200000BASEDR4_FULL_BIT => {
-                Self::Bit200000BaseDR4Full
+                Self::Phy200000BaseDR4Full
             }
             ETHTOOL_LINK_MODE_200000BASECR4_FULL_BIT => {
-                Self::Bit200000BaseCR4Full
+                Self::Phy200000BaseCR4Full
             }
-            ETHTOOL_LINK_MODE_100BASET1_FULL_BIT => Self::Bit100BaseT1Full,
-            ETHTOOL_LINK_MODE_1000BASET1_FULL_BIT => Self::Bit1000BaseT1Full,
+            ETHTOOL_LINK_MODE_100BASET1_FULL_BIT => Self::Phy100BaseT1Full,
+            ETHTOOL_LINK_MODE_1000BASET1_FULL_BIT => Self::Phy1000BaseT1Full,
             ETHTOOL_LINK_MODE_400000BASEKR8_FULL_BIT => {
-                Self::Bit400000BaseKR8Full
+                Self::Phy400000BaseKR8Full
             }
             ETHTOOL_LINK_MODE_400000BASESR8_FULL_BIT => {
-                Self::Bit400000BaseSR8Full
+                Self::Phy400000BaseSR8Full
             }
             ETHTOOL_LINK_MODE_400000BASELR8_ER8_FR8_FULL_BIT => {
-                Self::Bit400000BaseLR8Er8Fr8Full
+                Self::Phy400000BaseLR8Er8Fr8Full
             }
             ETHTOOL_LINK_MODE_400000BASEDR8_FULL_BIT => {
-                Self::Bit400000BaseDR8Full
+                Self::Phy400000BaseDR8Full
             }
             ETHTOOL_LINK_MODE_400000BASECR8_FULL_BIT => {
-                Self::Bit400000BaseCR8Full
+                Self::Phy400000BaseCR8Full
             }
-            ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::BitFecLlrs,
+            ETHTOOL_LINK_MODE_FEC_LLRS_BIT => Self::FecFecLlrs,
             ETHTOOL_LINK_MODE_100000BASEKR_FULL_BIT => {
-                Self::Bit100000BaseKRFull
+                Self::Phy100000BaseKRFull
             }
             ETHTOOL_LINK_MODE_100000BASESR_FULL_BIT => {
-                Self::Bit100000BaseSRFull
+                Self::Phy100000BaseSRFull
             }
             ETHTOOL_LINK_MODE_100000BASELR_ER_FR_FULL_BIT => {
-                Self::Bit100000BaseLRErFrFull
+                Self::Phy100000BaseLRErFrFull
             }
             ETHTOOL_LINK_MODE_100000BASECR_FULL_BIT => {
-                Self::Bit100000BaseCRFull
+                Self::Phy100000BaseCRFull
             }
             ETHTOOL_LINK_MODE_100000BASEDR_FULL_BIT => {
-                Self::Bit100000BaseDRFull
+                Self::Phy100000BaseDRFull
             }
             ETHTOOL_LINK_MODE_200000BASEKR2_FULL_BIT => {
-                Self::Bit200000BaseKR2Full
+                Self::Phy200000BaseKR2Full
             }
             ETHTOOL_LINK_MODE_200000BASESR2_FULL_BIT => {
-                Self::Bit200000BaseSR2Full
+                Self::Phy200000BaseSR2Full
             }
             ETHTOOL_LINK_MODE_200000BASELR2_ER2_FR2_FULL_BIT => {
-                Self::Bit200000BaseLR2Er2Fr2Full
+                Self::Phy200000BaseLR2Er2Fr2Full
             }
             ETHTOOL_LINK_MODE_200000BASEDR2_FULL_BIT => {
-                Self::Bit200000BaseDR2Full
+                Self::Phy200000BaseDR2Full
             }
             ETHTOOL_LINK_MODE_200000BASECR2_FULL_BIT => {
-                Self::Bit200000BaseCR2Full
+                Self::Phy200000BaseCR2Full
             }
             ETHTOOL_LINK_MODE_400000BASEKR4_FULL_BIT => {
-                Self::Bit400000BaseKR4Full
+                Self::Phy400000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_400000BASESR4_FULL_BIT => {
-                Self::Bit400000BaseSR4Full
+                Self::Phy400000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_400000BASELR4_ER4_FR4_FULL_BIT => {
-                Self::Bit400000BaseLR4Er4Fr4Full
+                Self::Phy400000BaseLR4Er4Fr4Full
             }
             ETHTOOL_LINK_MODE_400000BASEDR4_FULL_BIT => {
-                Self::Bit400000BaseDR4Full
+                Self::Phy400000BaseDR4Full
             }
             ETHTOOL_LINK_MODE_400000BASECR4_FULL_BIT => {
-                Self::Bit400000BaseCR4Full
+                Self::Phy400000BaseCR4Full
             }
-            ETHTOOL_LINK_MODE_100BASEFX_HALF_BIT => Self::Bit100BaseFXHalf,
-            ETHTOOL_LINK_MODE_100BASEFX_FULL_BIT => Self::Bit100BaseFXFull,
-            ETHTOOL_LINK_MODE_10BASET1L_FULL_BIT => Self::Bit10BaseT1LFull,
+            ETHTOOL_LINK_MODE_100BASEFX_HALF_BIT => Self::Phy100BaseFXHalf,
+            ETHTOOL_LINK_MODE_100BASEFX_FULL_BIT => Self::Phy100BaseFXFull,
+            ETHTOOL_LINK_MODE_10BASET1L_FULL_BIT => Self::Phy10BaseT1LFull,
             ETHTOOL_LINK_MODE_800000BASECR8_FULL_BIT => {
-                Self::Bit800000BaseCR8Full
+                Self::Phy800000BaseCR8Full
             }
             ETHTOOL_LINK_MODE_800000BASEKR8_FULL_BIT => {
-                Self::Bit800000BaseKR8Full
+                Self::Phy800000BaseKR8Full
             }
             ETHTOOL_LINK_MODE_800000BASEDR8_FULL_BIT => {
-                Self::Bit800000BaseDR8Full
+                Self::Phy800000BaseDR8Full
             }
             ETHTOOL_LINK_MODE_800000BASEDR8_2_FULL_BIT => {
-                Self::Bit800000BaseDR8V2Full
+                Self::Phy800000BaseDR8V2Full
             }
             ETHTOOL_LINK_MODE_800000BASESR8_FULL_BIT => {
-                Self::Bit800000BaseSR8Full
+                Self::Phy800000BaseSR8Full
             }
             ETHTOOL_LINK_MODE_800000BASEVR8_FULL_BIT => {
-                Self::Bit800000BaseVR8Full
+                Self::Phy800000BaseVR8Full
             }
-            ETHTOOL_LINK_MODE_10BASET1S_FULL_BIT => Self::Bit10BaseT1SFull,
-            ETHTOOL_LINK_MODE_10BASET1S_HALF_BIT => Self::Bit10BaseT1SHalf,
+            ETHTOOL_LINK_MODE_10BASET1S_FULL_BIT => Self::Phy10BaseT1SFull,
+            ETHTOOL_LINK_MODE_10BASET1S_HALF_BIT => Self::Phy10BaseT1SHalf,
             ETHTOOL_LINK_MODE_10BASET1S_P2MP_HALF_BIT => {
-                Self::Bit10BaseT1SP2MpHalf
+                Self::Phy10BaseT1SP2MpHalf
             }
-            ETHTOOL_LINK_MODE_10BASET1BRR_FULL_BIT => Self::Bit10BaseT1BrrFull,
+            ETHTOOL_LINK_MODE_10BASET1BRR_FULL_BIT => Self::Phy10BaseT1BrrFull,
             ETHTOOL_LINK_MODE_200000BASECR_FULL_BIT => {
-                Self::Bit200000BaseCRFull
+                Self::Phy200000BaseCRFull
             }
             ETHTOOL_LINK_MODE_200000BASEKR_FULL_BIT => {
-                Self::Bit200000BaseKRFull
+                Self::Phy200000BaseKRFull
             }
             ETHTOOL_LINK_MODE_200000BASEDR_FULL_BIT => {
-                Self::Bit200000BaseDRFull
+                Self::Phy200000BaseDRFull
             }
             ETHTOOL_LINK_MODE_200000BASEDR_2_FULL_BIT => {
-                Self::Bit200000BaseDRV2Full
+                Self::Phy200000BaseDRV2Full
             }
             ETHTOOL_LINK_MODE_200000BASESR_FULL_BIT => {
-                Self::Bit200000BaseSRFull
+                Self::Phy200000BaseSRFull
             }
             ETHTOOL_LINK_MODE_200000BASEVR_FULL_BIT => {
-                Self::Bit200000BaseVRFull
+                Self::Phy200000BaseVRFull
             }
             ETHTOOL_LINK_MODE_400000BASECR2_FULL_BIT => {
-                Self::Bit400000BaseCR2Full
+                Self::Phy400000BaseCR2Full
             }
             ETHTOOL_LINK_MODE_400000BASEKR2_FULL_BIT => {
-                Self::Bit400000BaseKR2Full
+                Self::Phy400000BaseKR2Full
             }
             ETHTOOL_LINK_MODE_400000BASEDR2_FULL_BIT => {
-                Self::Bit400000BaseDR2Full
+                Self::Phy400000BaseDR2Full
             }
             ETHTOOL_LINK_MODE_400000BASEDR2_2_FULL_BIT => {
-                Self::Bit400000BaseDR2V2Full
+                Self::Phy400000BaseDR2V2Full
             }
             ETHTOOL_LINK_MODE_400000BASESR2_FULL_BIT => {
-                Self::Bit400000BaseSR2Full
+                Self::Phy400000BaseSR2Full
             }
             ETHTOOL_LINK_MODE_400000BASEVR2_FULL_BIT => {
-                Self::Bit400000BaseVR2Full
+                Self::Phy400000BaseVR2Full
             }
             ETHTOOL_LINK_MODE_800000BASECR4_FULL_BIT => {
-                Self::Bit800000BaseCR4Full
+                Self::Phy800000BaseCR4Full
             }
             ETHTOOL_LINK_MODE_800000BASEKR4_FULL_BIT => {
-                Self::Bit800000BaseKR4Full
+                Self::Phy800000BaseKR4Full
             }
             ETHTOOL_LINK_MODE_800000BASEDR4_FULL_BIT => {
-                Self::Bit800000BaseDR4Full
+                Self::Phy800000BaseDR4Full
             }
             ETHTOOL_LINK_MODE_800000BASEDR4_2_FULL_BIT => {
-                Self::Bit800000BaseDR4V2Full
+                Self::Phy800000BaseDR4V2Full
             }
             ETHTOOL_LINK_MODE_800000BASESR4_FULL_BIT => {
-                Self::Bit800000BaseSR4Full
+                Self::Phy800000BaseSR4Full
             }
             ETHTOOL_LINK_MODE_800000BASEVR4_FULL_BIT => {
-                Self::Bit800000BaseVR4Full
+                Self::Phy800000BaseVR4Full
             }
             _ => Self::Other(value),
         }

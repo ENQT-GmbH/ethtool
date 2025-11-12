@@ -57,10 +57,11 @@ pub use feature::{
 pub use handle::EthtoolHandle;
 pub use header::{EthtoolHeader, EthtoolHeaderFlags};
 pub use link_mode::{
-    EthtoolLinkMode, EthtoolLinkModeAttr, EthtoolLinkModeBit,
-    EthtoolLinkModeCompact, EthtoolLinkModeDuplex, EthtoolLinkModeGetRequest,
-    EthtoolLinkModeHandle, EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
-    EthtoolLinkModeVerbose,
+    EthtoolLinkMode, EthtoolLinkModeAttr, EthtoolLinkModeBitset,
+    EthtoolLinkModeCompactBit, EthtoolLinkModeDuplex,
+    EthtoolLinkModeGetRequest, EthtoolLinkModeHandle,
+    EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
+    EthtoolLinkModeVerboseBit,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{

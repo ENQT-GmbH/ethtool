@@ -7,7 +7,7 @@ use netlink_packet_core::{
 
 use crate::{
     bitset_util::{parse_bitset_nlas, EthtoolBitset},
-    EthtoolAttr, EthtoolHeader, EthtoolLinkModeBit,
+    EthtoolAttr, EthtoolHeader, EthtoolLinkMode,
 };
 
 const ETHTOOL_A_LINKMODES_HEADER: u16 = 1;
@@ -52,28 +52,32 @@ impl From<u8> for EthtoolLinkModeRateMatching {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct EthtoolLinkModeCompact {
-    bit: EthtoolLinkModeBit,
+pub struct EthtoolLinkModeCompactBit {
+    mode: EthtoolLinkMode,
     advertised: bool,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct EthtoolLinkModeVerbose {
-    bit: EthtoolLinkModeBit,
+pub struct EthtoolLinkModeVerboseBit {
+    mode: EthtoolLinkMode,
     name: String,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub enum EthtoolLinkMode {
-    Verbose(Vec<EthtoolLinkModeVerbose>),
-    Compact(Vec<EthtoolLinkModeCompact>),
+pub enum EthtoolLinkModeBitset {
+    Verbose(Vec<EthtoolLinkModeVerboseBit>),
+    Compact(Vec<EthtoolLinkModeCompactBit>),
 }
 
-impl EthtoolLinkMode {
-    pub fn get_bits(&self) -> Vec<EthtoolLinkModeBit> {
+impl EthtoolLinkModeBitset {
+    pub fn get_modes(&self) -> Vec<EthtoolLinkMode> {
         match self {
-            Self::Verbose(modes) => modes.iter().map(|mode| mode.bit).collect(),
-            Self::Compact(modes) => modes.iter().map(|mode| mode.bit).collect(),
+            Self::Verbose(modes) => {
+                modes.iter().map(|mode| mode.mode).collect()
+            }
+            Self::Compact(modes) => {
+                modes.iter().map(|mode| mode.mode).collect()
+            }
         }
     }
 }
@@ -117,8 +121,8 @@ impl From<u32> for EthtoolLinkModeSpeed {
 pub enum EthtoolLinkModeAttr {
     Header(Vec<EthtoolHeader>),
     Autoneg(bool),
-    Ours(EthtoolLinkMode),
-    Peer(EthtoolLinkMode),
+    Ours(EthtoolLinkModeBitset),
+    Peer(EthtoolLinkModeBitset),
     Speed(EthtoolLinkModeSpeed),
     Duplex(EthtoolLinkModeDuplex),
     ControllerSubordinateCfg(u8),
@@ -204,24 +208,24 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                     EthtoolBitset::Verbose(bits) => {
                         let modes = bits
                             .into_iter()
-                            .map(|bit| EthtoolLinkModeVerbose {
-                                bit: bit.index.into(),
+                            .map(|bit| EthtoolLinkModeVerboseBit {
+                                mode: bit.index.into(),
                                 name: bit.name,
                             })
                             .collect();
 
-                        EthtoolLinkMode::Verbose(modes)
+                        EthtoolLinkModeBitset::Verbose(modes)
                     }
                     EthtoolBitset::Compact(bits) => {
                         let modes = bits
                             .into_iter()
-                            .map(|bit| EthtoolLinkModeCompact {
-                                bit: bit.index.into(),
+                            .map(|bit| EthtoolLinkModeCompactBit {
+                                mode: bit.index.into(),
                                 advertised: bit.value,
                             })
                             .collect();
 
-                        EthtoolLinkMode::Compact(modes)
+                        EthtoolLinkModeBitset::Compact(modes)
                     }
                 };
 
@@ -232,24 +236,24 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                     EthtoolBitset::Verbose(bits) => {
                         let modes = bits
                             .into_iter()
-                            .map(|bit| EthtoolLinkModeVerbose {
-                                bit: bit.index.into(),
+                            .map(|bit| EthtoolLinkModeVerboseBit {
+                                mode: bit.index.into(),
                                 name: bit.name,
                             })
                             .collect();
 
-                        EthtoolLinkMode::Verbose(modes)
+                        EthtoolLinkModeBitset::Verbose(modes)
                     }
                     EthtoolBitset::Compact(bits) => {
                         let modes = bits
                             .into_iter()
-                            .map(|bit| EthtoolLinkModeCompact {
-                                bit: bit.index.into(),
+                            .map(|bit| EthtoolLinkModeCompactBit {
+                                mode: bit.index.into(),
                                 advertised: bit.value,
                             })
                             .collect();
 
-                        EthtoolLinkMode::Compact(modes)
+                        EthtoolLinkModeBitset::Compact(modes)
                     }
                 };
 
