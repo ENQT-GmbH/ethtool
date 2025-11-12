@@ -12,6 +12,18 @@ const ETHTOOL_A_HEADER_DEV_INDEX: u16 = 1;
 const ETHTOOL_A_HEADER_DEV_NAME: u16 = 2;
 const ETHTOOL_A_HEADER_FLAGS: u16 = 3;
 
+const ETHTOOL_FLAG_COMPACT_BITSETS: u32 = 1;
+const ETHTOOL_FLAG_OMIT_REPLY: u32 = 2;
+const ETHTOOL_FLAG_STATS: u32 = 4;
+
+bitflags::bitflags! {
+    pub struct EthtoolHeaderFlags: u32 {
+        const COMPACT_BITSETS = ETHTOOL_FLAG_COMPACT_BITSETS;
+        const OMIT_REPLY = ETHTOOL_FLAG_OMIT_REPLY;
+        const STATS = ETHTOOL_FLAG_STATS;
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum EthtoolHeader {
     DevIndex(u32),

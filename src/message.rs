@@ -17,7 +17,7 @@ use crate::{
     EthtoolCableTestActionAttr, EthtoolCableTestNotifyAttr,
     EthtoolCableTestTdrActionAttr, EthtoolCableTestTdrConfig,
     EthtoolCableTestTdrConfigAttr, EthtoolCableTestTdrNotifyAttr,
-    EthtoolHeader,
+    EthtoolHeader, EthtoolHeaderFlags,
 };
 
 const ETHTOOL_MSG_PAUSE_GET: u8 = 21;
@@ -217,20 +217,25 @@ impl EthtoolMessage {
         }
     }
 
-    pub fn new_link_mode_get(iface_name: Option<&str>) -> Self {
-        let nlas = match iface_name {
-            Some(s) => {
-                vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(vec![
-                    EthtoolHeader::DevName(s.to_string()),
-                ]))]
-            }
-            None => {
-                vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(vec![]))]
-            }
-        };
+    pub fn new_link_mode_get(
+        iface_name: Option<&str>,
+        flags: Option<EthtoolHeaderFlags>,
+    ) -> Self {
+        let mut headers = Vec::new();
+
+        if let Some(name) = iface_name {
+            headers.push(EthtoolHeader::DevName(name.to_string()));
+        }
+
+        if let Some(flags) = flags {
+            headers.push(EthtoolHeader::Flags(flags.bits()));
+        }
+
         EthtoolMessage {
             cmd: EthtoolCmd::LinkModeGet,
-            nlas,
+            nlas: vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(
+                headers,
+            ))],
         }
     }
 

@@ -6,7 +6,8 @@ use netlink_packet_core::{
 };
 
 use crate::{
-    bitset_util::parse_bitset_bits_string_nlas, EthtoolAttr, EthtoolHeader,
+    bitset_util::{parse_bitset_nlas, EthtoolBitset},
+    EthtoolAttr, EthtoolHeader, EthtoolLinkModeBit,
 };
 
 const ETHTOOL_A_LINKMODES_HEADER: u16 = 1;
@@ -18,10 +19,55 @@ const ETHTOOL_A_LINKMODES_DUPLEX: u16 = 6;
 const ETHTOOL_A_LINKMODES_SUBORDINATE_CFG: u16 = 7;
 const ETHTOOL_A_LINKMODES_SUBORDINATE_STATE: u16 = 8;
 const ETHTOOL_A_LINKMODES_LANES: u16 = 9;
+const ETHTOOL_A_LINKMODES_RATE_MATCHING: u16 = 10;
 
 const DUPLEX_HALF: u8 = 0x00;
 const DUPLEX_FULL: u8 = 0x01;
 const DUPLEX_UNKNOWN: u8 = 0xff;
+
+const RATE_MATCH_NONE: u8 = 0;
+const RATE_MATCH_PAUSE: u8 = 1;
+const RATE_MATCH_CRS: u8 = 2;
+const RATE_MATCH_OPEN_LOOP: u8 = 3;
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum EthtoolLinkModeRateMatching {
+    RateMatchNone,
+    RateMatchPause,
+    RateMatchCrs,
+    RateMatchOpenLoop,
+    Other(u8),
+}
+
+impl From<u8> for EthtoolLinkModeRateMatching {
+    fn from(value: u8) -> Self {
+        match value {
+            RATE_MATCH_NONE => Self::RateMatchNone,
+            RATE_MATCH_PAUSE => Self::RateMatchPause,
+            RATE_MATCH_CRS => Self::RateMatchCrs,
+            RATE_MATCH_OPEN_LOOP => Self::RateMatchOpenLoop,
+            _ => Self::Other(value),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub struct EthtoolLinkModeCompact {
+    bit: EthtoolLinkModeBit,
+    advertised: bool,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub struct EthtoolLinkModeVerbose {
+    bit: EthtoolLinkModeBit,
+    name: String,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum EthtoolLinkMode {
+    Verbose(Vec<EthtoolLinkModeVerbose>),
+    Compact(Vec<EthtoolLinkModeCompact>),
+}
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum EthtoolLinkModeDuplex {
@@ -43,16 +89,33 @@ impl From<u8> for EthtoolLinkModeDuplex {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
+pub enum EthtoolLinkModeSpeed {
+    Valid(u32),
+    Unknown,
+}
+
+impl From<u32> for EthtoolLinkModeSpeed {
+    fn from(value: u32) -> Self {
+        if value == 0 || value == u32::MAX {
+            Self::Unknown
+        } else {
+            Self::Valid(value)
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum EthtoolLinkModeAttr {
     Header(Vec<EthtoolHeader>),
     Autoneg(bool),
-    Ours(Vec<String>),
-    Peer(Vec<String>),
-    Speed(u32),
+    Ours(EthtoolLinkMode),
+    Peer(EthtoolLinkMode),
+    Speed(EthtoolLinkModeSpeed),
     Duplex(EthtoolLinkModeDuplex),
     ControllerSubordinateCfg(u8),
     ControllerSubordinateState(u8),
     Lanes(u32),
+    RateMatching(EthtoolLinkModeRateMatching),
     Other(DefaultNla),
 }
 
@@ -63,14 +126,15 @@ impl Nla for EthtoolLinkModeAttr {
             Self::Autoneg(_)
             | Self::Duplex(_)
             | Self::ControllerSubordinateCfg(_)
-            | Self::ControllerSubordinateState(_) => 1,
+            | Self::ControllerSubordinateState(_)
+            | Self::RateMatching(_) => std::mem::size_of::<u8>(),
             Self::Ours(_) => {
                 todo!("Does not support changing ethtool link mode yet")
             }
             Self::Peer(_) => {
                 todo!("Does not support changing ethtool link mode yet")
             }
-            Self::Speed(_) | Self::Lanes(_) => 4,
+            Self::Speed(_) | Self::Lanes(_) => std::mem::size_of::<u32>(),
             Self::Other(attr) => attr.value_len(),
         }
     }
@@ -90,6 +154,7 @@ impl Nla for EthtoolLinkModeAttr {
                 ETHTOOL_A_LINKMODES_SUBORDINATE_STATE
             }
             Self::Lanes(_) => ETHTOOL_A_LINKMODES_LANES,
+            Self::RateMatching(_) => ETHTOOL_A_LINKMODES_RATE_MATCHING,
             Self::Other(attr) => attr.kind(),
         }
     }
@@ -125,16 +190,66 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                     .context("Invalid ETHTOOL_A_LINKMODES_AUTONEG value")?
                     == 1,
             ),
-
             ETHTOOL_A_LINKMODES_OURS => {
-                Self::Ours(parse_bitset_bits_string_nlas(payload)?)
+                let entries = match parse_bitset_nlas(payload)? {
+                    EthtoolBitset::Verbose(bits) => {
+                        let modes = bits
+                            .into_iter()
+                            .map(|bit| EthtoolLinkModeVerbose {
+                                bit: bit.index.into(),
+                                name: bit.name,
+                            })
+                            .collect();
+
+                        EthtoolLinkMode::Verbose(modes)
+                    }
+                    EthtoolBitset::Compact(bits) => {
+                        let modes = bits
+                            .into_iter()
+                            .map(|bit| EthtoolLinkModeCompact {
+                                bit: bit.index.into(),
+                                advertised: bit.value,
+                            })
+                            .collect();
+
+                        EthtoolLinkMode::Compact(modes)
+                    }
+                };
+
+                Self::Ours(entries)
             }
             ETHTOOL_A_LINKMODES_PEER => {
-                Self::Peer(parse_bitset_bits_string_nlas(payload)?)
+                let entries = match parse_bitset_nlas(payload)? {
+                    EthtoolBitset::Verbose(bits) => {
+                        let modes = bits
+                            .into_iter()
+                            .map(|bit| EthtoolLinkModeVerbose {
+                                bit: bit.index.into(),
+                                name: bit.name,
+                            })
+                            .collect();
+
+                        EthtoolLinkMode::Verbose(modes)
+                    }
+                    EthtoolBitset::Compact(bits) => {
+                        let modes = bits
+                            .into_iter()
+                            .map(|bit| EthtoolLinkModeCompact {
+                                bit: bit.index.into(),
+                                advertised: bit.value,
+                            })
+                            .collect();
+
+                        EthtoolLinkMode::Compact(modes)
+                    }
+                };
+
+                Self::Peer(entries)
             }
             ETHTOOL_A_LINKMODES_SPEED => Self::Speed(
                 parse_u32(payload)
-                    .context("Invalid ETHTOOL_A_LINKMODES_SPEED value")?,
+                    .context("Invalid ETHTOOL_A_LINKMODES_SPEED value")?
+                    .into(),
             ),
             ETHTOOL_A_LINKMODES_DUPLEX => Self::Duplex(
                 parse_u8(payload)
@@ -154,6 +269,11 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
             ETHTOOL_A_LINKMODES_LANES => Self::Lanes(
                 parse_u32(payload)
                     .context("Invalid ETHTOOL_A_LINKMODES_LANES value")?,
+            ),
+            ETHTOOL_A_LINKMODES_RATE_MATCHING => Self::RateMatching(
+                parse_u8(payload)
+                    .context("Invalid ETHTOOL_A_LINKMODES_RATE_MATCHING value")?
+                    .into(),
             ),
             _ => Self::Other(
                 DefaultNla::parse(buf).context("invalid NLA (unknown kind)")?,
