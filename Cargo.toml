@@ -36,7 +36,6 @@ bitflags = "2.9.4"
 anyhow = "1.0.100"
 tokio = { version = "1.44.0", features = ["macros", "rt", "rt-multi-thread", "time"] }
 env_logger = "0.9.3"
-anyhow = "1.0.100"
 
 [[example]]
 name = "dump_pause"
