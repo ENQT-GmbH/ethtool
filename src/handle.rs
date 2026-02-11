@@ -8,6 +8,7 @@ use netlink_packet_core::{
 };
 use netlink_packet_generic::GenlMessage;
 
+use crate::link_state::EthtoolLinkStateHandle;
 use crate::{
     try_ethtool, EthtoolCableTestHandle, EthtoolCableTestTdrHandle,
     EthtoolChannelHandle, EthtoolCoalesceHandle, EthtoolError,
@@ -35,6 +36,10 @@ impl EthtoolHandle {
 
     pub fn link_mode(&mut self) -> EthtoolLinkModeHandle {
         EthtoolLinkModeHandle::new(self.clone())
+    }
+
+    pub fn link_state(&mut self) -> EthtoolLinkStateHandle {
+        EthtoolLinkStateHandle::new(self.clone())
     }
 
     pub fn ring(&mut self) -> EthtoolRingHandle {

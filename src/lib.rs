@@ -13,6 +13,7 @@ mod fec;
 mod handle;
 mod header;
 mod link_mode;
+mod link_state;
 mod macros;
 mod message;
 mod pause;
@@ -62,6 +63,13 @@ pub use link_mode::{
     EthtoolLinkModeGetRequest, EthtoolLinkModeHandle,
     EthtoolLinkModeRateMatching, EthtoolLinkModeSpeed,
     EthtoolLinkModeVerboseBit,
+};
+pub use link_state::{
+    EthtoolExtState, EthtoolExtSubstate, EthtoolExtSubstateAutoneg,
+    EthtoolExtSubstateBadSignalIntegrity, EthtoolExtSubstateCableIssue,
+    EthtoolExtSubstateLinkLogicalMismatch, EthtoolExtSubstateLinkTraining,
+    EthtoolExtSubstateModule, EthtoolExtSubstateValue, EthtoolLinkStateAttr,
+    EthtoolLinkStateGetRequest, EthtoolLinkStateHandle,
 };
 pub use message::{EthtoolAttr, EthtoolCmd, EthtoolMessage};
 pub use pause::{

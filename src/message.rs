@@ -11,6 +11,7 @@ use crate::{
     feature::{parse_feature_nlas, EthtoolFeatureAttr},
     fec::{parse_fec_nlas, EthtoolFecAttr},
     link_mode::{parse_link_mode_nlas, EthtoolLinkModeAttr},
+    link_state::{parse_link_state_nlas, EthtoolLinkStateAttr},
     pause::{parse_pause_nlas, EthtoolPauseAttr},
     ring::{parse_ring_nlas, EthtoolRingAttr},
     tsinfo::{parse_tsinfo_nlas, EthtoolTsInfoAttr},
@@ -26,6 +27,8 @@ const ETHTOOL_MSG_FEATURES_GET: u8 = 11;
 const ETHTOOL_MSG_FEATURES_GET_REPLY: u8 = 11;
 const ETHTOOL_MSG_LINKMODES_GET: u8 = 4;
 const ETHTOOL_MSG_LINKMODES_GET_REPLY: u8 = 4;
+const ETHTOOL_MSG_LINKSTATE_GET: u8 = 6;
+const ETHTOOL_MSG_LINKSTATE_GET_REPLY: u8 = 6;
 const ETHTOOL_MSG_RINGS_GET: u8 = 15;
 const ETHTOOL_MSG_RINGS_GET_REPLY: u8 = 16;
 const ETHTOOL_MSG_COALESCE_GET: u8 = 19;
@@ -50,6 +53,8 @@ pub enum EthtoolCmd {
     FeatureGetReply,
     LinkModeGet,
     LinkModeGetReply,
+    LinkStateGet,
+    LinkStateGetReply,
     RingGet,
     RingGetReply,
     CoalesceGet,
@@ -76,6 +81,8 @@ impl From<EthtoolCmd> for u8 {
             EthtoolCmd::FeatureGetReply => ETHTOOL_MSG_FEATURES_GET_REPLY,
             EthtoolCmd::LinkModeGet => ETHTOOL_MSG_LINKMODES_GET,
             EthtoolCmd::LinkModeGetReply => ETHTOOL_MSG_LINKMODES_GET_REPLY,
+            EthtoolCmd::LinkStateGet => ETHTOOL_MSG_LINKSTATE_GET,
+            EthtoolCmd::LinkStateGetReply => ETHTOOL_MSG_LINKMODES_GET_REPLY,
             EthtoolCmd::RingGet => ETHTOOL_MSG_RINGS_GET,
             EthtoolCmd::RingGetReply => ETHTOOL_MSG_RINGS_GET_REPLY,
             EthtoolCmd::CoalesceGet => ETHTOOL_MSG_COALESCE_GET,
@@ -100,6 +107,7 @@ pub enum EthtoolAttr {
     Pause(EthtoolPauseAttr),
     Feature(EthtoolFeatureAttr),
     LinkMode(EthtoolLinkModeAttr),
+    LinkState(EthtoolLinkStateAttr),
     Ring(EthtoolRingAttr),
     Coalesce(EthtoolCoalesceAttr),
     TsInfo(EthtoolTsInfoAttr),
@@ -117,6 +125,7 @@ impl Nla for EthtoolAttr {
             Self::Pause(attr) => attr.value_len(),
             Self::Feature(attr) => attr.value_len(),
             Self::LinkMode(attr) => attr.value_len(),
+            Self::LinkState(attr) => attr.value_len(),
             Self::Ring(attr) => attr.value_len(),
             Self::Coalesce(attr) => attr.value_len(),
             Self::TsInfo(attr) => attr.value_len(),
@@ -134,6 +143,7 @@ impl Nla for EthtoolAttr {
             Self::Pause(attr) => attr.kind(),
             Self::Feature(attr) => attr.kind(),
             Self::LinkMode(attr) => attr.kind(),
+            Self::LinkState(attr) => attr.kind(),
             Self::Ring(attr) => attr.kind(),
             Self::Coalesce(attr) => attr.kind(),
             Self::TsInfo(attr) => attr.kind(),
@@ -151,6 +161,7 @@ impl Nla for EthtoolAttr {
             Self::Pause(attr) => attr.emit_value(buffer),
             Self::Feature(attr) => attr.emit_value(buffer),
             Self::LinkMode(attr) => attr.emit_value(buffer),
+            Self::LinkState(attr) => attr.emit_value(buffer),
             Self::Ring(attr) => attr.emit_value(buffer),
             Self::Coalesce(attr) => attr.emit_value(buffer),
             Self::TsInfo(attr) => attr.emit_value(buffer),
@@ -236,6 +247,26 @@ impl EthtoolMessage {
             nlas: vec![EthtoolAttr::LinkMode(EthtoolLinkModeAttr::Header(
                 headers,
             ))],
+        }
+    }
+
+    pub fn new_link_state_get(iface_name: Option<&str>) -> Self {
+        let nlas = match iface_name {
+            Some(s) => {
+                vec![EthtoolAttr::LinkState(EthtoolLinkStateAttr::Header(
+                    vec![EthtoolHeader::DevName(s.to_string())],
+                ))]
+            }
+            None => {
+                vec![EthtoolAttr::LinkState(EthtoolLinkStateAttr::Header(
+                    vec![],
+                ))]
+            }
+        };
+
+        EthtoolMessage {
+            cmd: EthtoolCmd::LinkStateGet,
+            nlas,
         }
     }
 
@@ -412,6 +443,10 @@ impl ParseableParametrized<[u8], GenlHeader> for EthtoolMessage {
             ETHTOOL_MSG_LINKMODES_GET_REPLY => Self {
                 cmd: EthtoolCmd::LinkModeGetReply,
                 nlas: parse_link_mode_nlas(buffer)?,
+            },
+            ETHTOOL_MSG_LINKSTATE_GET_REPLY => Self {
+                cmd: EthtoolCmd::LinkStateGetReply,
+                nlas: parse_link_state_nlas(buffer)?,
             },
             ETHTOOL_MSG_RINGS_GET_REPLY => Self {
                 cmd: EthtoolCmd::RingGetReply,
